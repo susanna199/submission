@@ -36,6 +36,34 @@ A robust, multi-tenant attendance tracking API built with FastAPI and PostgreSQL
     uvicorn src.main:app --reload
 
 
+## NOTE: JWT Payload Token Structure
+
+Standard Login Token
+
+   ```code snippet
+   
+      {
+     "sub": "user_id_123",        // Unique user identifier
+     "email": "susanna@test.com", // For display and identification
+     "role": "student",           // role: student | trainer | monitoring_officer
+     "exp": 1714567890,           // Expiration (e.g., 24 hours)
+     "iat": 1714532100            // Issued at timestamp
+   }
+```
+
+Scoped Monitoring Token
+
+   ```code snippet
+   {
+     "sub": "user_id_123",
+     "role": "monitoring_officer",
+     "scope": "monitoring_read_only", // CRITICAL: The "Extra Key"
+     "exp": 1714535700,               // Short lifespan (e.g., 1 hour)
+     "iat": 1714532100
+   }
+   ```
+
+
 ## 3. Test Accounts (Templates)
 *Note: Since the database starts empty, the signup commands must be used below to register these accounts first.*
 
@@ -140,6 +168,36 @@ Windows Users: Please use the PowerShell versions to avoid JSON decoding errors.
       ```bash
          curl.exe -X GET "http://localhost:8000/batches/4/summary" -H "Authorization: Bearer <JWT>"
       ```
-   
+
+## 5. Schema Decisions
+
+a) The batch_trainers and batch_students were designed with a many-to-many relationship. This is because a student can enroll themselves in multiple batches and a batch can have multiple trainers.
+
+b) To invite students to a batch, a token system was created, where the trainers creating a new batch give out a token. By generating a signed, time-limited invite_token, only students with the physical or digital "key" provided by a Trainer can link themselves to a batch.
+
+c) The User model stores a hashed_password rather than plain text. For this, the passlib with the bcrypt backend was utilized to ensure industry-standard salted hashing, satisfying the requirement for secure credential storage.
+
+d) The Monitoring Officer has more than just a standard role based access control. Because this rolecan see sensitive attendance data across all institutions, a single login is a high risk. The scoped token is usually configured to expire much faster (within one hour). This Master Key is an environment variable and is not stored in the database. If the database is ever leaked, they still would not find the Master Key because it lives in the server's memory, not the disk.
+
+## 5. Done/Partially Done/Skipped
+
+Done:
+1. Role-Based Access Control (RBAC)
+2. Authentication
+3. Many-to-many enrolements
+4. Attendance Lifecycle
+5. Swagger docs for UI
+
+Partially Done:
+1. Session Conflict Logic: At this point, a trainer can create overlapping session for the same batch which needs to be corrected using a collision check.
+2. Testcase fail: The test for marking attendance failed with a 403 Forbidden error. I built the system so that a student must be officially enrolled in a batch before they can mark attendance. Because the test script tried to skip the enrollment process and jump straight to marking attendance, my code correctly blocked it to protect the data integrity. 
+
+Skipped:
+-> The session invite link created is not shared with the student through an email for now. 
+
+## 6. Enhancement with more time:
+1. Ensure the student receive the session links created by trainers so they can opt to join a session.
+2. To enhance features that the monitoring officer has, an analytics layer can be included that gives alerts to find any batch where attendance has dropped below 75% over the last 5 sessions. It moves from tracking to alerting based functionality.
+3. Since students are the ones marking their own attendance, integrity checks need to be enforced that allow them to mark attendance only within the stipulated time.
 
 

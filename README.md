@@ -102,42 +102,44 @@ Windows Users: Please use the PowerShell versions to avoid JSON decoding errors.
 
 **Part B: Batch & Enrollment Management**
 
-1. Generating Batch Invite Link
+   1. Generating Batch Invite Link
 
-```bash
-curl.exe -X POST "http://localhost:8000/batches/4/invite" -H "Authorization: Bearer <JWT>"
+      ```bash
+         curl.exe -X POST "http://localhost:8000/batches/4/invite" -H "Authorization: Bearer <JWT>"
+      ```
+   2. Join Batch
 
-2. Join Batch
-
-```bash
-curl.exe -X POST "http://localhost:8000/batches/join" -H "Authorization: Bearer <STUDENT_JWT>" -H "Content-Type: application/json" -d "{\`"token\`": \`"PASTE_INVITE_TOKEN_HERE\`"}"
-
+      ```bash
+         curl.exe -X POST "http://localhost:8000/batches/join" -H "Authorization: Bearer <STUDENT_JWT>" -H "Content-Type: application/json" -d "{\`"token\`": \`"PASTE_INVITE_TOKEN_HERE\`"}"
+      ```
 
 **Part C: Attendance Operations**
 
-1. Create Session (Trainer only)
+   1. Create Session (Trainer only)
 
-```bash
-curl.exe -X POST "http://localhost:8000/sessions" -H "Authorization: Bearer <JWT>" -H "Content-Type: application/json" -d "{\`"batch_id\`": 4, \`"title\`": \`"Python Lab 1\`", \`"date\`": \`"2026-04-25\`", \`"start_time\`": \`"10:00:00\`", \`"end_time\`": \`"12:00:00\`"}"
+      ```bash
+         curl.exe -X POST "http://localhost:8000/sessions" -H "Authorization: Bearer <JWT>" -H "Content-Type: application/json" -d "{\`"batch_id\`": 4, \`"title\`": \`"Python Lab 1\`", \`"date\`": \`"2026-04-25\`", \`"start_time\`": \`"10:00:00\`", \`"end_time\`": \`"12:00:00\`"}"
+      ```
 
-2. Mark Attendance (Student only)
+   2. Mark Attendance (Student only)
 
-```bash
-curl.exe -X POST "http://localhost:8000/attendance/mark?session_id=1" -H "Authorization: Bearer <STUDENT_JWT>"
+      ```bash
+         curl.exe -X POST "http://localhost:8000/attendance/mark?session_id=1" -H "Authorization: Bearer <STUDENT_JWT>"
+      ```
 
+   3. Get Session Attendance List
 
-3. Get Session Attendance List
-
-```bash
-curl.exe -X GET "http://localhost:8000/sessions/1/attendance" -H "Authorization: Bearer <JWT>"
+      ```bash
+         curl.exe -X GET "http://localhost:8000/sessions/1/attendance" -H "Authorization: Bearer <JWT>"
+      ```
 
 **Part D: Monitoring**
 
-1. Get Batch Summary (Monitoring Officer\'s JWT)
+   1. Get Batch Summary (Monitoring Officer\'s JWT)
 
-```bash
-curl.exe -X GET "http://localhost:8000/batches/4/summary" -H "Authorization: Bearer <JWT>"
-
-2. Get Institution Summary
+      ```bash
+         curl.exe -X GET "http://localhost:8000/batches/4/summary" -H "Authorization: Bearer <JWT>"
+      ```
+   
 
 

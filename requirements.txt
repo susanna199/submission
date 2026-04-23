@@ -1,0 +1,17 @@
+# Web Framework
+fastapi
+uvicorn[standard]
+
+# Database and ORM
+sqlalchemy
+psycopg2-binary
+python-dotenv
+
+# Security and Authentication
+python-jose[cryptography]
+passlib[bcrypt]
+python-multipart
+
+# Testing
+pytest
+httpx

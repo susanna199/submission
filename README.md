@@ -63,35 +63,42 @@ Windows Users: Please use the PowerShell versions to avoid JSON decoding errors.
    II. Standard Login (Obtain 24h JWT)
    All Platforms:
    
-     
+   ```bash
       curl.exe -X POST "http://localhost:8000/auth/login" -d "username=trainer@test.com&password=password123"
-
+   ```
 
 2. **Student:**
 
    I. Signup:
-    
+
+   ```bash
       curl.exe -X POST "http://localhost:8000/auth/signup" -H "Content-Type: application/json" -d "{\`"name\`": \`"Susanna\`", \`"email\`": \`"student@test.com\`",    \`"password\`": \`"password123\`", \`"role\`": \`"student\`"}"
+   ```
 
    II. Standard Login (Obtain 24h JWT)
 
+   ```bash
       curl.exe -X POST "http://localhost:8000/auth/login" -d "username=student@test.com&password=password123"
-   
+   ```
 
 3. **Monitoring Officer:**
 
    I. Signup
 
+   ```bash
       curl.exe -X POST "http://localhost:8000/auth/signup" -H "Content-Type: application/json" -d "{\`"name\`": \`"Auditor\`", \`"email\`": \`"auditor@test.com\`", \`"password\`": \`"pass123\`", \`"role\`": \`"monitoring_officer\`"}"
-
+   ```
+   
    II. Login as Monitoring Officer
-      
-      curl.exe -X POST "http://localhost:8000/auth/login" -d "username=auditor@test.com&password=pass123"
 
+   ```bash
+      curl.exe -X POST "http://localhost:8000/auth/login" -d "username=auditor@test.com&password=pass123"
+   ```
    III. Obtain Monitoring Scoped Token (Step-Up Authentication)
 
+   ```bash
       curl.exe -X POST "http://localhost:8000/auth/monitoring-token" -H "Authorization: Bearer <PASTE_TOKEN_FROM_STEP_2_HERE>" -H "Content-Type: application/json" -d "{\`"key\`": \`"CHRIS_DS_2026_SECURE\`"}"
-
+   ```
 
 **Part B: Batch & Enrollment Management**
 

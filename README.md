@@ -54,11 +54,11 @@ Windows Users: Please use the PowerShell versions to avoid JSON decoding errors.
 1. **Trainer:**
 
    I. Signup:
-    
+   ```bash
       curl.exe -X POST "http://localhost:8000/auth/signup" `
                -H "Content-Type: application/json" `
                -d "{\`"name\`": \`"Trainer Joe\`", \`"email\`": \`"trainer@test.com\`", \`"password\`": \`"password123\`", \`"role\`": \`"trainer\`"}"
-
+   ```
 
    II. Standard Login (Obtain 24h JWT)
    All Platforms:

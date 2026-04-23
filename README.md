@@ -35,100 +35,103 @@ A robust, multi-tenant attendance tracking API built with FastAPI and PostgreSQL
 
     uvicorn src.main:app --reload
 
-3. Test Accounts (Templates)
-Note: Since the database starts empty, the signup commands must be used below to register these accounts first.
 
-Role | Email | Password
-Student | student@test.com | password@123
-Trainer | trainer@test.com | password123
-Institution | admin@christ.edu | password123
-Monitoring Officer | auditor@test.com | password123
+## 3. Test Accounts (Templates)
+*Note: Since the database starts empty, the signup commands must be used below to register these accounts first.*
 
-4. Sample curl Commands
+| Role | Email | Password |
+| :--- | :--- | :--- |
+| **Student** | `student@test.com` | `password@123` |
+| **Trainer** | `trainer@test.com` | `password123` |
+| **Institution** | `admin@christ.edu` | `password123` |
+| **Monitoring Officer** | `auditor@test.com` | `password123` |
+
+## 4. Sample curl Commands
 Windows Users: Please use the PowerShell versions to avoid JSON decoding errors.
 
-**Part 1**
-A. Signup (Trainer)
-Bash/Linux/Mac:
+**Part A: Signup and Login**
 
-    ```bash
-    curl -X POST "http://localhost:8000/auth/signup" \
-        -H "Content-Type: application/json" \
-        -d '{"name": "Trainer Joe", "email": "trainer@test.com", "password": "password123", "role": "trainer"}'
+**Trainer:**
 
 Windows PowerShell:
 
     ```bash
+      curl.exe -X POST "http://localhost:8000/auth/signup" `
+               -H "Content-Type: application/json" `
+               -d "{\`"name\`": \`"Trainer Joe\`", \`"email\`": \`"trainer@test.com\`", \`"password\`": \`"password123\`", \`"role\`": \`"trainer\`"}"
 
-curl.exe -X POST "http://localhost:8000/auth/signup" `
-         -H "Content-Type: application/json" `
-         -d "{\`"name\`": \`"Trainer Joe\`", \`"email\`": \`"trainer@test.com\`", \`"password\`": \`"password123\`", \`"role\`": \`"trainer\`"}"
 
+   B. Standard Login (Obtain 24h JWT)
+   All Platforms:
+   
+      ```bash
+      curl.exe -X POST "http://localhost:8000/auth/login" -d "username=trainer@test.com&password=password123"
 
-B. Standard Login (Obtain 24h JWT)
-All Platforms:
+**Student**
 
 ```bash
+   curl.exe -X POST "http://localhost:8000/auth/signup" -H "Content-Type: application/json" -d "{\`"name\`": \`"Susanna\`", \`"email\`": \`"student@test.com\`",    \`"password\`": \`"password123\`", \`"role\`": \`"student\`"}"
 
-curl.exe -X POST "http://localhost:8000/auth/login" -d "username=trainer@test.com&password=password123"
+   Standard Login (Returns 24h JWT)
 
-**Part 2**
-C. Signup (Student)
-
-curl.exe -X POST "http://localhost:8000/auth/signup" -H "Content-Type: application/json" -d "{\`"name\`": \`"Susanna\`", \`"email\`": \`"student@test.com\`", \`"password\`": \`"password123\`", \`"role\`": \`"student\`"}"
-
-Standard Login (Returns 24h JWT)
-
-curl.exe -X POST "http://localhost:8000/auth/login" -d "username=student@test.com&password=password123"
+```bash
+   curl.exe -X POST "http://localhost:8000/auth/login" -d "username=student@test.com&password=password123"
 
 
-** Part 3: Monitoring Officer **
+**Monitoring Officer**
 
 1. Signup
 
+```bash
 curl.exe -X POST "http://localhost:8000/auth/signup" -H "Content-Type: application/json" -d "{\`"name\`": \`"Auditor\`", \`"email\`": \`"auditor@test.com\`", \`"password\`": \`"pass123\`", \`"role\`": \`"monitoring_officer\`"}"
 
 2. Login as Monitoring Officer
 
+```bash
 curl.exe -X POST "http://localhost:8000/auth/login" -d "username=auditor@test.com&password=pass123"
 
 3. Obtain Monitoring Scoped Token (Step-Up Authentication)
 
+```bash
 curl.exe -X POST "http://localhost:8000/auth/monitoring-token" -H "Authorization: Bearer <PASTE_TOKEN_FROM_STEP_2_HERE>" -H "Content-Type: application/json" -d "{\`"key\`": \`"CHRIS_DS_2026_SECURE\`"}"
 
 
-**Part 3: Batch & Enrollment Management**
+**Part B: Batch & Enrollment Management**
 
 1. Generating Batch Invite Link
 
+```bash
 curl.exe -X POST "http://localhost:8000/batches/4/invite" -H "Authorization: Bearer <JWT>"
-
 
 2. Join Batch
 
+```bash
 curl.exe -X POST "http://localhost:8000/batches/join" -H "Authorization: Bearer <STUDENT_JWT>" -H "Content-Type: application/json" -d "{\`"token\`": \`"PASTE_INVITE_TOKEN_HERE\`"}"
 
 
-** Part 4: Attendance Operations**
+**Part C: Attendance Operations**
 
 1. Create Session (Trainer only)
 
+```bash
 curl.exe -X POST "http://localhost:8000/sessions" -H "Authorization: Bearer <JWT>" -H "Content-Type: application/json" -d "{\`"batch_id\`": 4, \`"title\`": \`"Python Lab 1\`", \`"date\`": \`"2026-04-25\`", \`"start_time\`": \`"10:00:00\`", \`"end_time\`": \`"12:00:00\`"}"
 
 2. Mark Attendance (Student only)
 
+```bash
 curl.exe -X POST "http://localhost:8000/attendance/mark?session_id=1" -H "Authorization: Bearer <STUDENT_JWT>"
 
 
 3. Get Session Attendance List
 
+```bash
 curl.exe -X GET "http://localhost:8000/sessions/1/attendance" -H "Authorization: Bearer <JWT>"
 
-
-** Part 5: Monitoring**
+**Part D: Monitoring**
 
 1. Get Batch Summary (Monitoring Officer\'s JWT)
 
+```bash
 curl.exe -X GET "http://localhost:8000/batches/4/summary" -H "Authorization: Bearer <JWT>"
 
 2. Get Institution Summary

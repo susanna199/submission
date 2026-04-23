@@ -63,6 +63,7 @@ Scoped Monitoring Token
    }
    ```
 
+To ensure a better security enforced for the scoped monitoring token, I would implement rate limiting. If a user provides the wrong secret key 5 times in a row, their IP address is "jailed" (blocked) for 30 minutes.
 
 ## 3. Test Accounts (Templates)
 *Note: Since the database starts empty, the signup commands must be used below to register these accounts first.*

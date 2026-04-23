@@ -55,7 +55,7 @@ Windows Users: Please use the PowerShell versions to avoid JSON decoding errors.
 
 Windows PowerShell:
 
-    ```bash
+    
       curl.exe -X POST "http://localhost:8000/auth/signup" `
                -H "Content-Type: application/json" `
                -d "{\`"name\`": \`"Trainer Joe\`", \`"email\`": \`"trainer@test.com\`", \`"password\`": \`"password123\`", \`"role\`": \`"trainer\`"}"
@@ -64,17 +64,16 @@ Windows PowerShell:
    B. Standard Login (Obtain 24h JWT)
    All Platforms:
    
-      ```bash
+     
       curl.exe -X POST "http://localhost:8000/auth/login" -d "username=trainer@test.com&password=password123"
 
 **Student**
 
-```bash
+
    curl.exe -X POST "http://localhost:8000/auth/signup" -H "Content-Type: application/json" -d "{\`"name\`": \`"Susanna\`", \`"email\`": \`"student@test.com\`",    \`"password\`": \`"password123\`", \`"role\`": \`"student\`"}"
 
-   Standard Login (Returns 24h JWT)
+Standard Login (Returns 24h JWT)
 
-```bash
    curl.exe -X POST "http://localhost:8000/auth/login" -d "username=student@test.com&password=password123"
 
 

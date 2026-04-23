@@ -51,48 +51,46 @@ Windows Users: Please use the PowerShell versions to avoid JSON decoding errors.
 
 **Part A: Signup and Login**
 
-**Trainer:**
+1. **Trainer:**
 
-Windows PowerShell:
-
+   I. Signup:
     
       curl.exe -X POST "http://localhost:8000/auth/signup" `
                -H "Content-Type: application/json" `
                -d "{\`"name\`": \`"Trainer Joe\`", \`"email\`": \`"trainer@test.com\`", \`"password\`": \`"password123\`", \`"role\`": \`"trainer\`"}"
 
 
-   B. Standard Login (Obtain 24h JWT)
+   II. Standard Login (Obtain 24h JWT)
    All Platforms:
    
      
       curl.exe -X POST "http://localhost:8000/auth/login" -d "username=trainer@test.com&password=password123"
 
-**Student**
 
+2. **Student:**
 
-   curl.exe -X POST "http://localhost:8000/auth/signup" -H "Content-Type: application/json" -d "{\`"name\`": \`"Susanna\`", \`"email\`": \`"student@test.com\`",    \`"password\`": \`"password123\`", \`"role\`": \`"student\`"}"
+   I. Signup:
+    
+      curl.exe -X POST "http://localhost:8000/auth/signup" -H "Content-Type: application/json" -d "{\`"name\`": \`"Susanna\`", \`"email\`": \`"student@test.com\`",    \`"password\`": \`"password123\`", \`"role\`": \`"student\`"}"
 
-Standard Login (Returns 24h JWT)
+   II. Standard Login (Obtain 24h JWT)
 
-   curl.exe -X POST "http://localhost:8000/auth/login" -d "username=student@test.com&password=password123"
+      curl.exe -X POST "http://localhost:8000/auth/login" -d "username=student@test.com&password=password123"
+   
 
+3. **Monitoring Officer:**
 
-**Monitoring Officer**
+   I. Signup
 
-1. Signup
+      curl.exe -X POST "http://localhost:8000/auth/signup" -H "Content-Type: application/json" -d "{\`"name\`": \`"Auditor\`", \`"email\`": \`"auditor@test.com\`", \`"password\`": \`"pass123\`", \`"role\`": \`"monitoring_officer\`"}"
 
-```bash
-curl.exe -X POST "http://localhost:8000/auth/signup" -H "Content-Type: application/json" -d "{\`"name\`": \`"Auditor\`", \`"email\`": \`"auditor@test.com\`", \`"password\`": \`"pass123\`", \`"role\`": \`"monitoring_officer\`"}"
+   II. Login as Monitoring Officer
+      
+      curl.exe -X POST "http://localhost:8000/auth/login" -d "username=auditor@test.com&password=pass123"
 
-2. Login as Monitoring Officer
+   III. Obtain Monitoring Scoped Token (Step-Up Authentication)
 
-```bash
-curl.exe -X POST "http://localhost:8000/auth/login" -d "username=auditor@test.com&password=pass123"
-
-3. Obtain Monitoring Scoped Token (Step-Up Authentication)
-
-```bash
-curl.exe -X POST "http://localhost:8000/auth/monitoring-token" -H "Authorization: Bearer <PASTE_TOKEN_FROM_STEP_2_HERE>" -H "Content-Type: application/json" -d "{\`"key\`": \`"CHRIS_DS_2026_SECURE\`"}"
+      curl.exe -X POST "http://localhost:8000/auth/monitoring-token" -H "Authorization: Bearer <PASTE_TOKEN_FROM_STEP_2_HERE>" -H "Content-Type: application/json" -d "{\`"key\`": \`"CHRIS_DS_2026_SECURE\`"}"
 
 
 **Part B: Batch & Enrollment Management**
